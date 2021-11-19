@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc   
+  http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+  http://www.springframework.org/schema/beans   
+  http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/util     
+  http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+	<!-- Root Context: defines shared resources visible to all other web components -->
+
+	<bean name="dsdbcp"
+		class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName"
+			value="com.mysql.cj.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/pluckitdb?characterEncoding=utf8" />
+		<!-- <property name="url"
+			value="jdbc:mysql://localhost:3306/hhi53?characterEncoding=utf8" /> -->
+		<property name="username" value="root" />
+		<property name="password" value="1234" />
+		<!-- <property name="username" value="hhi53" />
+		<property name="password" value="" /> -->
+		<property name="initialSize" value="5" />
+		<property name="maxIdle" value="5" />
+	</bean>
+
+	<!-- 파일 업로드 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</bean>
+
+	<!-- Mybatis -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dsdbcp" />
+		<property name="configLocation"
+			value="classpath:mybatis-config.xml" />
+		<property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml"/>
+	</bean>
+
+	<bean id="sqlSession"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+</beans>

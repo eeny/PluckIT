@@ -1,0 +1,292 @@
+@charset "UTF-8";
+
+*, html, body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* 공통으로 작성해 놓은 CSS 시작*/
+body {
+	font-family: 'Noto Sans KR', sans-serif;
+	width: 1920px;
+	height: 100%;
+	background-color: #f4f7f7;
+	overflow-x: hidden;
+}
+
+ul li {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+img {
+	display: block;
+	width: 100%;
+}
+
+input, select {
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+/********************************************************************************/
+/* 공통으로 작성해 놓은 CSS 끝*/
+#wrap {
+	/*전체를 감싸는 wrap*/
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	position: relative;
+}
+
+/*사이드 바 CSS 시작*/
+nav {
+	width: 200px;
+	height: 100%;
+}
+
+.gnb-align {
+	width: 200px;
+	height: 100%;
+	background-color: #0091EA;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+.logo {
+	text-align: center;
+	background-color: #0091EA;
+}
+
+.gnb-menu li {
+	width: 100%;
+	margin: 10px 0;
+	padding: 12px;
+	text-align: left;
+	cursor: pointer;
+}
+
+.gnb-menu li:hover {
+	background-color: #0382c2;
+}
+
+.gnb-menu li:first-child {
+	margin-top: 0;
+}
+
+.gnb-menu li a {
+	color: #efefef;
+	font-size: 16px;
+}
+
+.gnb-menu li a i {
+	margin-right: 10px;
+	font-size: 20px;
+}
+
+/********************************************************************************/
+/*사이드 바 CSS 끝*/
+main {
+	/*사이드 바 제외 main css*/
+	width: 1720px;
+	height: 100%;
+	background-color: #f4f7f7;
+}
+
+/*상단 메뉴 CSS 시작*/
+.main-top {
+	height: 50px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #ccc;
+}
+
+.user-name p {
+	color: #333;
+	font-size: 20px;
+	font-weight: 600;
+	margin-left: 30px;
+}
+
+.main-top-icon {
+	display: flex;
+}
+
+.main-top-icon i {
+	font-size: 28px;
+	margin-right: 30px;
+	padding-top: 6px;
+	color: #333;
+	cursor: pointer;
+}
+
+.search {
+	border: 3px solid #0288d1;
+	padding: 5px;
+	margin-right: 30px;
+	width: 250px;
+	color: #333;
+}
+
+.f {
+	display: flex;
+	justify-content: space-between;
+}
+
+.f>input[type=search] {
+	background-color: transparent;
+	border: none;
+}
+
+input::-webkit-input-placeholder {
+	color: #333;
+	font-size: 12px;
+}
+
+.f>button {
+	background-color: transparent;
+	border: none;
+}
+
+.f>button>i {
+	font-size: 20px;
+	margin-right: 0;
+	padding-top: 0;
+	padding: 0 10px;
+}
+
+/********************************************************************************/
+/*상단 메뉴 CSS 끝*/
+.main-section {
+	display: flex;
+	justify-content: space-between;
+}
+
+/*************** 여기서부터 추가했음 ******************/
+.menuClose {
+	display: none;
+}
+
+.submenu li {
+	border: none;
+}
+
+.submenu li a {
+	padding-left: 30px;
+}
+
+.submenu li a i {
+	font-size: 12px;
+}
+
+/*오른쪽 본문 부분*/
+.main-right {
+	width: 1720px;
+	height: 100%;
+	padding: 15px 30px;
+}
+
+.main-right h1 {
+	/*게시판 제목 - 공지사항*/
+	color: #333;
+	font-size: 18px;
+	margin-bottom: 30px;
+}
+
+/********************** 사원 목록 테이블 ***********************/
+table.scheduleTable {
+	/*테이블*/
+	width: 100%;
+	margin-top: 30px;
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	color: #333;
+	font-size: 14px;
+	text-align: center;
+	background-color: white;
+	table-layout: fixed;
+	/* 테이블 너비 고정 */
+	word-break: break-all;
+	/* 텍스트 자동 줄바꿈 */
+}
+
+.scheduleTable th {
+	height: 42px;
+	background-color: #01579b;
+	color: white;
+}
+
+.scheduleTable tbody tr:hover {
+	/* 한줄씩 hover 효과 */
+	background-color: #f4f7f7;
+}
+
+.scheduleTable td {
+	height: 32px;
+	border-bottom: 1px solid #ccc;
+}
+
+.scheduleTable input {
+	width: 100%;
+	height: 100%;
+	border: none;
+	padding: 5px;
+}
+
+.buttons {
+	/* 버튼들 - 게시판 등록 & 취소 */
+	text-align: center;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.buttons input, .buttons a {
+	border: none;
+	padding: 7px 15px;
+	border-radius: 3px 3px 3px 3px;
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.buttons a {
+	background-color: #0288d1;
+}
+
+.buttons input[type=reset] {
+	background-color: #8a959b;
+}
+
+button.mod {
+	/* 수정 버튼 */
+	border: none;
+	padding: 3px 3px;
+	border-radius: 3px 3px 3px 3px;
+	color: white;
+	font-weight: bold;
+	cursor: pointer;
+	background-color: green;
+}
+
+button.del {
+	/* 삭제 버튼 */
+	border: none;
+	padding: 3px 3px;
+	border-radius: 3px 3px 3px 3px;
+	color: white;
+	font-weight: bold;
+	cursor: pointer;
+	background-color: red;
+}
+
+/* 풀캘린더 설정 */
+.cal-container {
+	width: 1660px;
+	height: 1000px;
+}

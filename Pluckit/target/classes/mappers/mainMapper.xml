@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="main">
+	<!-- 회원가입 -->
+	<insert id="insertSignupData" parameterType="com.pluckit.app.dto.EmployeeDTO">
+		<selectKey keyProperty="eid" resultType="int" order="BEFORE">
+			SELECT 
+				IFNULL(MAX(emp_id)+1, 1) 
+			FROM 
+				employee
+		</selectKey>
+		INSERT INTO employee (
+			emp_num, 
+			dept_id,
+			rank_id, 
+			emp_birth, 
+			emp_name, 
+			emp_pw, 
+			emp_status, 
+			emp_hire, 
+			emp_auth
+		
+		) VALUES ( 
+			CONCAT(#{emp_num}, LPAD(#{eid}, 3, 0)),
+			#{dept_id}, 
+			#{rank_id}, 
+			#{emp_birth}, 
+			#{emp_name}, 
+			#{emp_pw}, 
+			'재직',
+			CURDATE(), 
+			0
+		)
+	</insert>
+	
+	<!-- 로그인 -->
+	<select id="selectLoginData" parameterType="com.pluckit.app.dto.EmployeeDTO" resultType="com.pluckit.app.dto.EmployeeDTO">
+		SELECT 
+			e.emp_id,
+			e.emp_num, 
+			e.emp_name, 
+			d.dept_name AS deptName, 
+			r.rank_name AS rankName, 
+			e.emp_photo, 
+			e.emp_auth 
+		FROM 
+			employee AS e
+		LEFT JOIN 
+			department AS d
+		ON 
+			e.dept_id = d.dept_id
+		LEFT JOIN 
+			rank AS r
+		ON 
+			e.rank_id = r.rank_id
+		WHERE 
+			emp_num = #{emp_num} 
+		AND 
+			emp_pw = #{emp_pw}
+	</select>
+	
+	<!-- 메인화면 상의 전사공지 가져오기 -->
+	<select id="getBoardList" resultType="com.pluckit.app.dto.BoardMainDTO">
+		SELECT
+			bm_num,
+			bm_title,
+			bm_writer,
+			bm_regdate
+		FROM
+			board_main_notice
+		WHERE bm_grpord = 0
+		ORDER BY
+			bm_regdate DESC
+		LIMIT 0, 7
+	</select>
+	
+	<!-- 암호화된 비밀번호 가져오기 -->
+	<select id="getEmpPw" parameterType="String" resultType="String">
+		SELECT 
+			emp_pw 
+		FROM 
+			employee 
+		WHERE 
+			emp_num = #{value}
+	</select>
+	
+	<!-- 로그인 시 사원번호 존재유무 확인 -->
+	<select id="chkEmpNum" parameterType="com.pluckit.app.dto.EmployeeDTO" resultType="int">
+		SELECT 
+			COUNT(emp_id) 
+		FROM 
+			employee 
+		WHERE 
+			emp_num = #{emp_num}
+	</select>
+</mapper>

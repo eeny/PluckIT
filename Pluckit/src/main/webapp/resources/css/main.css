@@ -1,0 +1,736 @@
+@charset "UTF-8";
+
+*, html, body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* 공통으로 작성해 놓은 CSS 시작*/
+body {
+	font-family: 'Noto Sans KR', sans-serif;
+	width: 1920px;
+	height: 100%;
+	background-color: #f4f7f7;
+}
+
+ul li {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+img {
+	display: block;
+	width: 100%;
+}
+
+/********************************************************************************/
+/* 공통으로 작성해 놓은 CSS 끝*/
+#wrap {
+	/*전체를 감싸는 wrap*/
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
+/*사이드 바 CSS 시작*/
+nav {
+	width: 200px;
+	height: 100%;
+}
+
+.gnb-align {
+	width: 200px;
+	height: 100%;
+	background-color: #0091EA;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 2;
+}
+
+.logo {
+	text-align: center;
+	background-color: #0091EA;
+}
+
+.gnb-menu li {
+	width: 100%;
+	margin: 10px 0;
+	padding: 12px;
+	text-align: left;
+	cursor: pointer;
+}
+
+.gnb-menu li:hover {
+	background-color: #0382c2;
+}
+
+.gnb-menu li:first-child {
+	margin-top: 0;
+}
+
+.gnb-menu li a {
+	color: #efefef;
+	font-size: 16px;
+}
+
+.gnb-menu li a i {
+	margin-right: 10px;
+	font-size: 20px;
+}
+
+/********************************************************************************/
+/*사이드 바 CSS 끝*/
+main {
+	/*사이드 바 제외 main css*/
+	width: 1720px;
+	height: 100%;
+	background-color: #f4f7f7;
+}
+
+/*상단 메뉴 CSS 시작*/
+.main-top {
+	height: 50px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #ccc;
+}
+
+.user-name p {
+	color: #333;
+	font-size: 20px;
+	font-weight: 600;
+	margin-left: 30px;
+}
+
+.user-name p i {
+	font-size: 22px;
+}
+
+.main-top-icon {
+	display: flex;
+}
+
+.main-top-icon i {
+	font-size: 28px;
+	margin-right: 30px;
+	padding-top: 6px;
+	color: #333;
+	cursor: pointer;
+}
+
+.search {
+	border: 3px solid #0091EA;
+	padding: 5px;
+	margin-right: 30px;
+	width: 250px;
+	color: #333;
+}
+
+/* 사용자 메뉴 추가함 */
+#userMenu {
+	background-color: pink;
+}
+
+.f {
+	display: flex;
+	justify-content: space-between;
+}
+
+.f>input[type=search] {
+	background-color: transparent;
+	border: none;
+}
+
+input::-webkit-input-placeholder {
+	color: #333;
+	font-size: 12px;
+}
+
+.f>button {
+	background-color: transparent;
+	border: none;
+}
+
+.f>button>i {
+	font-size: 20px;
+	margin-right: 0;
+	padding-top: 0;
+	padding: 0 10px;
+}
+
+/********************************************************************************/
+/*상단 메뉴 CSS 끝*/
+.main-section {
+	display: flex;
+	justify-content: space-between;
+}
+
+.section-left {
+	width: 552px;
+	margin: 30px;
+}
+
+.myPage {
+	/* 마이페이지 */
+	width: 100%;
+	height: 560px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: white;
+	box-shadow: 3px 3px 10px #ccc;
+	color: #333;
+}
+
+div.myPhoto {
+	/* 마이페이지 - 사진 */
+	width: 120px;
+	height: 120px;
+	margin: 0 auto;
+	margin-top: 20px;
+	margin-bottom: 10px;
+	border-radius: 70%;
+	overflow: hidden;
+}
+
+.myPhoto img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+div.myInfo {
+	/* 마이페이지 - 사원정보 */
+	text-align: center;
+	font-size: 16px;
+}
+
+.myInfo b {
+	color: #01579b;
+}
+
+p.empNum, p.empAuth {
+	font-size: 13px;
+	margin-top: 7px;
+	color: #777;
+}
+
+.empNum span:first-child, .empAuth span:first-child {
+	color: white;
+	font-weight: bold;
+	background-color: #777;
+	padding: 1px 3px;
+	border-radius: 5px 5px 5px 5px;
+}
+
+div.tabBox {
+	/* 마이페이지 - 탭버튼 */
+	margin-top: 10px;
+	display: flex;
+	font-size: 15px;
+}
+
+.tabBox div {
+	width: 50%;
+	text-align: center;
+	padding: 10px 0;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	cursor: pointer;
+}
+
+.tabBox div.tabbtn1 {
+	position: relative;
+}
+
+.tabBox div.tabbtn2 {
+	position: relative;
+}
+
+.tab {
+	/* 탭메뉴 버튼 */
+	color: #01579b;
+	font-weight: bold;
+}
+
+.tab::before {
+	/* 선택된 탭메뉴 하단에 파란색 바 */
+	content: '';
+	display: block;
+	position: absolute;
+	bottom: -1px;
+	left: 0;
+	width: 100%;
+	height: 3px;
+	background-color: #01579b;
+}
+
+div.clock {
+	/* 마이페이지 - 시계 */
+	width: 400px;
+	height: 60px;
+	margin: 15px 74px;
+	border: 1px solid #b1b1b1;
+	border-radius: 30px;
+	text-align: center;
+	display: inline-table;
+}
+
+.clock p.clockDate {
+	width: 40%;
+	height: 100%;
+	display: inline-block;
+	font-size: 13px;
+	font-weight: bold;
+	vertical-align: top;
+	line-height: 55px;
+	border-right: 1px solid #ccc;
+}
+
+.clock p.clockTime {
+	width: 60%;
+	height: 100%;
+	display: inline-block;
+	font-size: 25px;
+	font-weight: bold;
+	line-height: 55px;
+	color: #777;
+}
+
+.clockTime span {
+	padding: 7px;
+}
+
+.clockTime span:first-child, .clockTime span:nth-child(2) {
+	/* 시간, 분 */
+	color: #333;
+}
+
+.clockTime span:last-child {
+	/* 초 */
+	color: #333;
+	font-weight: lighter;
+}
+
+div.commute {
+	/* 마이페이지 - 출퇴근시간 */
+	position: relative;
+}
+
+.commute::before {
+	/* 출퇴근 시간 상단의 회색 선 */
+	content: '';
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 75px;
+	width: 400px;
+	height: 1px;
+	background-color: #ccc;
+}
+
+.commute h5 {
+	padding: 10px 0 5px 0;
+	padding-left: 75px;
+	font-size: 13px;
+}
+
+.commute div {
+	width: 400px;
+	height: 60px;
+	margin: 0 auto;
+	display: flex;
+	border: 1px solid #dfe8f3;
+	border-radius: 10px;
+	text-align: center;
+}
+
+.commute div p, .commute div a {
+	width: 25%;
+	line-height: 57px;
+	font-size: 15px;
+	background-color: #f6f8f9;
+}
+
+.commute div a {
+	/* 출근, 퇴근 버튼 */
+	color: #01579b;
+	font-weight: bold;
+	background-color: #ebf0f3;
+	cursor: pointer;
+}
+
+.commute div a:first-child {
+	border-radius: 10px 0 0 10px;
+}
+
+.commute div p:last-child {
+	border-radius: 0 10px 10px 0;
+}
+
+div.condition {
+	/* 마이페이지 - 근무상태변경 */
+	text-align: center;
+	width: 400px;
+	height: 55px;
+	margin: 21px auto;
+	border: 1px solid #01579b;
+	border-radius: 10px;
+}
+
+div.condition select {
+	width: 60%;
+	height: 100%;
+	border: none;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	color: #01579b;
+	font-family: 'Noto Sans KR', sans-serif;
+	letter-spacing: 5px;
+	cursor: pointer;
+}
+
+.condition select:focus {
+	outline: none;
+}
+
+.tab1 {
+	/* 근태정보를 클릭하면 나타나는 내용 */
+	/* display: none; */
+	
+}
+
+div.vacation {
+	/* 휴가정보 메뉴 */
+	width: 400px;
+	margin: 0 auto;
+	padding-top: 30px;
+}
+
+.vacation h5 {
+	font-size: 13px;
+	margin-bottom: 10px;
+}
+
+.vacation div {
+	width: 100%;
+	height: 38px;
+	margin-bottom: 10px;
+	border: 1px solid #b1b1b1;
+	border-radius: 30px;
+	background-color: #f6f8f9;
+	font-size: 14px;
+	text-align: center;
+	display: flex;
+}
+
+.vacation div b {
+	width: 50%;
+	line-height: 34px;
+	color: #01579b;
+}
+
+.vacation div span {
+	width: 50%;
+	line-height: 34px;
+}
+
+.tab2 {
+	/* 휴가정보를 클릭하면 나타나는 내용 */
+	display: none;
+}
+
+.btn-G {
+	/* 바로가기 버튼 모음 */
+	width: 100%;
+	height: 200px;
+	margin-top: 30px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: white;
+	box-shadow: 3px 3px 10px #ccc;
+	color: #333;
+}
+
+div.gButtons {
+	/* 바로가기 버튼 */
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.gButtons a {
+	padding: 13px 30px;
+	margin-top: 23px;
+	background-color: #ebf0f3;
+	color: #01579b;
+	text-align: center;
+	font-size: 13px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.gButtons a:hover {
+	background-color: #01579b;
+	color: white;
+	transition: all 0.5s;
+}
+
+div.gCounts {
+	/* 바로가기 건수 */
+	padding: 30px 100px 0 0;
+	text-align: right;
+	font-size: 13px;
+}
+
+.gCounts p span {
+	width: 10px;
+	height: 10px;
+	background-color: #777;
+	margin-right: 5px;
+	display: inline-block;
+}
+
+.gCounts p:nth-child(2) span {
+	background-color: #b1b1b1;
+}
+
+.gCounts p:nth-child(3) span {
+	background-color: #01579b;
+}
+
+.gCounts p:nth-child(4) span {
+	background-color: #0382c2;
+}
+
+.gCounts a {
+	padding: 0 5px;
+	color: red;
+	text-decoration: underline;
+}
+
+.section-right {
+	width: 1, 078px;
+	margin-top: 30px;
+	margin-right: 30px;
+	margin-bottom: 30px;
+}
+
+.section-right-top {
+	height: 300px;
+	display: flex;
+	margin-bottom: 30px;
+}
+
+.section-right-top-left {
+	/* 업무공유 */
+	width: 526px;
+	margin-right: 30px;
+	height: 100%;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: white;
+	box-shadow: 3px 3px 10px #ccc;
+}
+
+.section-right-top-left div.shareTitle {
+	/* 업무공유 상단 제목 */
+	display: flex;
+	padding: 20px;
+}
+
+.shareTitle h3 {
+	width: 50%;
+	color: #333;
+}
+
+.shareTitle i {
+	width: 50%;
+	font-size: larger;
+	line-height: 26px;
+	text-align: right;
+	color: #0382c2;
+	cursor: pointer;
+}
+
+table.shareTbl {
+	/* 업무공유 테이블 */
+	width: 485px;
+	margin: 0 auto;
+	text-align: center;
+	border-collapse: collapse;
+	font-size: 14px;
+	color: #333;
+}
+
+.shareTbl tr {
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+.shareTbl th {
+	padding: 5px;
+}
+
+.shareTbl tr.noData {
+	/* 등록된 게시물이 없을 경우 꽉 차게 */
+	height: 170px;
+	color: #777;
+}
+
+tr.noData i {
+	color: #b1b1b1;
+}
+
+.section-right-top-right {
+	/* 일정공유(달력) */
+	width: 526px;
+	height: 100%;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: white;
+	box-shadow: 3px 3px 10px #ccc;
+}
+
+.section-right-top-right div.eventsTitle {
+	/* 일정공유 상단 제목 */
+	display: flex;
+	padding: 20px 20px 10px 20px;
+}
+
+.eventsTitle h3 {
+	width: 50%;
+	color: #333;
+}
+
+.eventsTitle i {
+	width: 50%;
+	font-size: larger;
+	line-height: 26px;
+	text-align: right;
+	color: #0382c2;
+	cursor: pointer;
+}
+
+table.calendarTbl {
+	/* 달력 테이블 */
+	width: 485px;
+	margin: 0 auto;
+	text-align: center;
+	border-collapse: collapse;
+	font-size: 14px;
+	color: #333;
+}
+
+.calendarTbl th, .calendarTbl td {
+	padding: 4px;
+}
+
+.calendarTbl tr:first-child {
+	font-size: 20px;
+}
+
+.calendarTbl td:hover {
+	background-color: #f6f8f9;
+}
+
+.calendarTbl button {
+	/* 이전달, 다음달 버튼 */
+	border: 1px solid #dfe8f3;
+	background-color: transparent;
+	cursor: pointer;
+}
+
+.calendarTbl button i {
+	color: #0382c2;
+	padding: 3px 7px;
+}
+
+.calendarTbl tr.days {
+	border-bottom: 1px solid #ccc;
+}
+
+.days th:first-child {
+	color: crimson;
+}
+
+.days th:last-child {
+	color: mediumblue;
+}
+
+.section-right-bottom {
+	/* 공지사항 게시글 */
+	height: 460px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: white;
+	box-shadow: 3px 3px 10px #ccc;
+}
+
+.section-right-bottom div.boardTitle {
+	/* 전사공지 상단 제목 */
+	display: flex;
+	padding: 20px;
+}
+
+.boardTitle h3 {
+	width: 50%;
+	color: #333;
+}
+
+.boardTitle i {
+	width: 50%;
+	font-size: larger;
+	line-height: 26px;
+	text-align: right;
+	color: #0382c2;
+	cursor: pointer;
+}
+
+table.boardTbl {
+	/* 전사공지 테이블 */
+	width: 1040px;
+	margin: 0 auto;
+	text-align: center;
+	border-collapse: collapse;
+	font-size: 14px;
+	color: #333;
+}
+
+.boardTbl tr {
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+.boardTbl th {
+	padding: 13px;
+}
+
+.boardTbl td {
+	padding: 11px;
+}
+
+.boardTbl tr.noDataBoard {
+	/* 등록된 게시물이 없을 경우 꽉 차게 */
+	height: 315px;
+	color: #777;
+}
+
+tr.noDataBoard i {
+	color: #b1b1b1;
+}
+
+.boardTbl img {
+	/* 공지 확성기 이미지 */
+	width: 20px;
+	margin: 0 auto;
+}
+
+.boardTbl a {
+	color: #333;
+}

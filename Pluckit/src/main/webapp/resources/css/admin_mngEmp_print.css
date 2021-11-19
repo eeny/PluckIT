@@ -1,0 +1,133 @@
+@charset "UTF-8";
+
+*, html, body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* 공통으로 작성해 놓은 CSS 시작*/
+body {
+	font-family: 'Noto Sans KR', sans-serif;
+	width: 1920px;
+	height: 100%;
+	background-color: #f4f7f7;
+	overflow-x: hidden;
+}
+
+ul li {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+img {
+	display: block;
+	width: 100%;
+}
+
+input, select {
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+/********************************************************************************/
+/* 공통으로 작성해 놓은 CSS 끝*/
+#wrap {
+	/*전체를 감싸는 wrap*/
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	position: relative;
+}
+
+/*오른쪽 본문 부분*/
+.main-right {
+	width: 1050px;
+	height: 100%;
+	padding: 15px 30px;
+}
+
+.main-right h1 {
+	/*게시판 제목 - 공지사항*/
+	color: #333;
+	font-size: 20px;
+	margin-bottom: 30px;
+}
+
+/********************** 사원 목록 테이블 ***********************/
+table.empListTable {
+	/*테이블*/
+	width: 100%;
+	margin-top: 30px;
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	color: #333;
+	font-size: 15px;
+	background-color: white;
+	table-layout: fixed;
+	/* 테이블 너비 고정 */
+	word-break: break-all;
+	/* 텍스트 자동 줄바꿈 */
+}
+
+.empListTable caption {
+	text-align: left;
+	font-size: 18px;
+	font-weight: bold;
+	margin-bottom: 15px;
+}
+
+.empListTable th {
+	height: 42px;
+	text-align: center;
+	border-bottom: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	background-color: #ccc;
+}
+
+.empListTable td {
+	height: 32px;
+	border-bottom: 1px solid #ccc;
+	padding: 15px;
+}
+
+.empListTable td:first-child {
+	text-align: center;
+	padding: 0;
+}
+
+.empListTable div.empPhoto {
+	width: 95%;
+	margin: 0 auto;
+}
+
+.empListTable td.addrsetc {
+	width: 100%;
+}
+
+.empListTable td.addrsetc input {
+	width: 49.5%;
+}
+
+h4 {
+	/* 추가 사항 제목 */
+	margin: 20px 0 15px 0;
+	margin-top: 30px;
+	font-size: 18px;
+}
+
+div.moreDetails {
+	/* 추가 사항 입력틀 */
+	width: 100%;
+}
+
+.moreDetails textarea {
+	width: 100%;
+	height: 250px;
+	padding: 10px;
+	font-family: 'Noto Sans KR', sans-serif;
+	font-size: 15px;
+}

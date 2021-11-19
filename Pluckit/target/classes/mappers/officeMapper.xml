@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="office">
+
+	<!-- 직원목록 -->
+	<select id="employeeSelectDate" resultType="com.pluckit.app.dto.EmployeeDTO">
+		SELECT 
+			e.emp_num, 
+			e.emp_name, 
+			e.emp_tel, 
+			e.emp_email, 
+			d.dept_name AS deptName, 
+			r.rank_name AS rankName
+		FROM 
+			employee AS e
+		LEFT JOIN 
+			department AS d
+		ON 
+			e.dept_id = d.dept_id
+		LEFT JOIN 
+			rank AS r
+		ON 
+			e.rank_id = r.rank_id
+		ORDER BY
+			emp_id DESC
+		LIMIT
+			${offset}, ${pageSize}
+	</select>
+	
+	<!-- 직원 검색 -->
+	<select id="employeeSelectOneData" resultType="com.pluckit.app.dto.EmployeeDTO" parameterType="HashMap">
+    	SELECT 
+			e.emp_num, 
+			e.emp_name, 
+			e.emp_tel, 
+			e.emp_email, 
+			d.dept_name AS deptName, 
+			r.rank_name AS rankName
+		FROM 
+			employee AS e
+		LEFT JOIN 
+			department AS d
+		ON 
+			e.dept_id = d.dept_id
+		LEFT JOIN 
+			rank AS r
+		ON 
+			e.rank_id = r.rank_id
+		WHERE 
+			e.${select} LIKE CONCAT('%', #{search}, '%')
+		ORDER BY
+			emp_id DESC
+		LIMIT
+			${offset}, ${pageSize}
+		
+	</select>
+
+	<!-- 총 직원수 가져오기 -->
+	<select id="getAllEmployeeCount" resultType="int">
+		SELECT
+			COUNT(emp_id)
+		FROM
+			employee
+	</select>
+	
+	<!-- 검색한 직원수 가져오기 -->
+	<select id="getSearchEmployeeCount" resultType="int" parameterType="HashMap">
+		SELECT
+			COUNT(emp_id)
+		FROM
+			employee
+		WHERE 
+			${select} LIKE CONCAT('%', #{search}, '%')
+	</select>
+	
+	
+	
+</mapper>

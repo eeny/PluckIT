@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="admin">
+	<!-- 관리용 게시판 정보 입력 -->
+	<insert id="makeBoard" parameterType="com.pluckit.app.dto.BoardDTO">
+		INSERT INTO board (
+			b_id, 
+			dept_id, 
+			b_writer, 
+			b_title, 
+			b_readAuth, 
+			b_writeAuth, 
+			b_replyAuth, 
+			b_downAuth, 
+			b_regdate
+		) VALUES (
+			#{b_id}, 
+			#{dept_id}, 
+			#{b_writer}, 
+			#{b_title}, 
+			#{b_readAuth}, 
+			#{b_writeAuth}, 
+			#{b_replyAuth}, 
+			#{b_downAuth}, 
+			NOW()
+		)
+	</insert>
+	
+	<!-- 생성된 게시판 목록 가져오기 -->
+	<select id="getAllBoardList" resultType="com.pluckit.app.dto.BoardDTO" parameterType="HashMap">
+		SELECT 
+			b.b_id, 
+			d.dept_name AS deptName, 
+			b.b_writer, 
+			b.b_title, 
+			b.b_readAuth, 
+			b.b_writeAuth, 
+			b.b_replyAuth, 
+			b.b_downAuth, 
+			b.b_regdate
+		FROM 
+			board AS b
+		LEFT JOIN 
+			department AS d
+		ON 
+			b.dept_id = d.dept_id
+		ORDER BY 
+			b.b_regdate DESC
+		LIMIT 
+			${offset}, ${pageSize}
+	</select>
+	
+	<!-- 새로운 게시판 본문 테이블 생성하기 -->
+	<insert id="createMainTable" parameterType="HashMap">
+		${main}
+	</insert>
+	
+	<!-- 새로운 게시판 댓글 테이블 생성하기 -->
+	<insert id="createReplyTable" parameterType="HashMap">
+		${reply}
+	</insert>
+	
+	<!-- 게시판 코드 중복 체크하기 -->
+	<select id="isBIdExist" parameterType="String" resultType="int">
+		SELECT 
+			COUNT(b_id) 
+		FROM 
+			board 
+		WHERE 
+			b_id = #{bId}
+	</select>
+	
+	<!-- 수정할 게시판 정보 가져오기 -->
+	<select id="getBoardInfo" parameterType="String" resultType="com.pluckit.app.dto.BoardDTO">
+		SELECT 
+			b_id, 
+			dept_id, 
+			b_writer, 
+			b_title, 
+			b_readAuth, 
+			b_writeAuth, 
+			b_replyAuth, 
+			b_downAuth 
+		FROM 
+			board 
+		WHERE 
+			b_id = #{bId}
+	</select>
+	
+	<!-- 게시판 정보 수정하기 -->
+	<update id="updateBoardInfo" parameterType="com.pluckit.app.dto.BoardDTO">
+		UPDATE board 
+		SET 
+			dept_id = #{dept_id}, 
+			b_title = #{b_title}, 
+			b_readAuth = #{b_readAuth}, 
+			b_writeAuth = #{b_writeAuth}, 
+			b_replyAuth = #{b_replyAuth}, 
+			b_downAuth = #{b_downAuth}, 
+			b_regdate = NOW() 
+		WHERE 
+			b_id = #{b_id}
+	</update>
+	
+	<!-- 삭제할 게시판 내에 데이터 존재 유무 확인 -->
+	<select id="isBoardDataExist" parameterType="String" resultType="int">
+		SELECT 
+			COUNT(bm_num) 
+		FROM 
+			${value}
+	</select>
+	
+	<!-- 댓글 게시판 삭제 -->
+	<insert id="dropReplyTable" parameterType="HashMap">
+		${reply}
+	</insert>
+	
+	<!-- 본문 게시판 삭제 -->
+	<insert id="dropMaintable" parameterType="HashMap">
+		${main}
+	</insert>
+	
+	<!-- 게시판 정보 삭제 -->
+	<delete id="deleteBoardInfo" parameterType="String">
+		DELETE FROM board 
+		WHERE 
+			b_id = #{bId}
+	</delete>
+	
+	<!-- 게시판 검색 리스트 -->
+	<select id="searchBoardList" parameterType="HashMap" resultType="com.pluckit.app.dto.BoardDTO">
+		SELECT 
+			b.b_id, 
+			d.dept_name AS deptName, 
+			b.b_writer, 
+			b.b_title, 
+			b.b_readAuth, 
+			b.b_writeAuth, 
+			b.b_replyAuth, 
+			b.b_downAuth, 
+			b.b_regdate
+		FROM 
+			board AS b
+		LEFT JOIN 
+			department AS d
+		ON 
+			b.dept_id = d.dept_id
+		WHERE 
+			${select} LIKE CONCAT('%', #{search}, '%')
+		ORDER BY 
+			b.b_regdate DESC
+		LIMIT 
+			${offset}, ${pageSize}
+	</select>
+	
+	<!-- 게시판 총 개수 -->
+	<select id="getAllBoardCount" resultType="int">
+		SELECT 
+			COUNT(b_id) 
+		FROM board
+	</select>
+	
+	<!-- 게시판 검색 리스트 총 개수 -->
+	<select id="getSearchBoardCount" parameterType="HashMap" resultType="int">
+		SELECT 
+			COUNT(b.b_id)
+		FROM 
+			board AS b
+		LEFT JOIN 
+			department AS d
+		ON 
+			b.dept_id = d.dept_id
+		WHERE 
+			${select} LIKE CONCAT('%', #{search}, '%')
+	</select>
+	
+	<!-- 사원 총 인원수 -->
+	<select id="getAllEmplyeeCount" resultType="int">
+		SELECT
+			COUNT(emp_id)
+		FROM
+			employee
+	</select>
+	
+	<!-- 모든 사원 정보 가져오기 -->
+	<select id="getAllEmployeeList" parameterType="HashMap" resultType="com.pluckit.app.dto.EmployeeDTO">
+		SELECT 
+			e.emp_id,
+			e.emp_num,
+			e.emp_pw,
+			e.emp_name,
+			e.emp_ename,
+			e.emp_birth,
+			e.emp_gender,
+			e.emp_tel,
+			e.emp_email,
+			e.emp_postcode,
+			e.emp_addr,
+			e.emp_detailaddr,
+			e.emp_extraaddr,
+			e.dept_id,
+			e.rank_id,
+			e.emp_status,
+			e.emp_hire,
+			e.emp_quit,
+			e.emp_photo,
+			e.emp_auth,
+			d.dept_name AS deptName,
+			r.rank_name AS rankName,
+			e.emp_remarks
+		FROM 
+			employee AS e
+		LEFT JOIN
+			department AS d
+		ON
+			e.dept_id = d.dept_id
+		LEFT JOIN
+			rank AS r
+		ON 
+			e.rank_id = r.rank_id
+		ORDER BY
+			emp_id DESC
+		LIMIT
+			${offset}, ${pageSize}
+	</select>
+	
+	<!-- 1명의 직원 정보 가져오기 -->
+	<select id="getEmployeeInfo" parameterType="int" resultType="com.pluckit.app.dto.EmployeeDTO">
+		SELECT 
+			e.emp_id,
+			e.emp_num,
+			e.emp_pw,
+			e.emp_name,
+			e.emp_ename,
+			e.emp_birth,
+			e.emp_gender,
+			e.emp_tel,
+			e.emp_email,
+			e.emp_postcode,
+			e.emp_addr,
+			e.emp_detailaddr,
+			e.emp_extraaddr,
+			e.dept_id,
+			e.rank_id,
+			e.emp_status,
+			e.emp_hire,
+			e.emp_quit,
+			e.emp_photo,
+			e.emp_auth,
+			d.dept_name AS deptName,
+			r.rank_name AS rankName,
+			e.emp_remarks
+		FROM 
+			employee AS e
+		LEFT JOIN
+			department AS d
+		ON
+			e.dept_id = d.dept_id
+		LEFT JOIN
+			rank AS r
+		ON 
+			e.rank_id = r.rank_id
+		WHERE
+			e.emp_id = #{empId}
+	</select>
+	
+	<!-- 사원의 접근권한/재직상태만 변경하기 -->
+	<update id="modifyEmpAuthNStatusProc" parameterType="com.pluckit.app.dto.EmployeeDTO">
+		UPDATE 
+			employee
+		SET
+			emp_status = #{emp_status},
+			emp_auth = #{emp_auth}
+		WHERE
+			emp_id = #{emp_id}
+	</update>
+	
+	<!-- 사원 삭제 -->
+	<delete id="deleteEmployee" parameterType="int">
+		DELETE FROM
+			employee
+		WHERE
+			emp_id = #{empId}
+	</delete>
+	
+	<!-- 신규사원 입사처리 -->
+	<insert id="insertEmpInfoProc" parameterType="HashMap">
+		<selectKey keyProperty="eid" resultType="int" order="BEFORE">
+			SELECT 
+				IFNULL(MAX(emp_id)+1, 1) 
+			FROM 
+				employee
+		</selectKey>
+		INSERT INTO employee 
+		SET
+			emp_num = CONCAT(#{emp_num}, LPAD(#{eid}, 3, 0)),
+			emp_pw = '0000',
+			emp_name = #{emp_name},
+			emp_ename = #{emp_ename},
+			<if test="emp_birth != ''">
+			emp_birth = #{emp_birth}, 
+			</if>
+			emp_gender = #{emp_gender},
+			emp_tel = #{emp_tel},
+			emp_email = #{emp_email},
+			emp_postcode = #{emp_postcode},
+			emp_addr = #{emp_addr},
+			emp_detailaddr = #{emp_detailaddr},
+			emp_extraaddr = #{emp_extraaddr},
+			dept_id = #{dept_id},
+			rank_id = #{rank_id},
+			emp_status = '재직',
+			<if test="emp_hire != ''">
+			emp_hire = #{emp_hire}, 
+			</if>
+			<if test="emp_hire == ''">
+			emp_hire = CURDATE(),
+			</if>
+			emp_photo = #{emp_photo},
+			emp_auth = 1,
+			emp_remarks = #{emp_remarks}
+	</insert>
+	
+	<!-- 기존 증명사진 파일명 가져오기 -->
+	<select id="getFileName" parameterType="HashMap" resultType="String">
+		SELECT
+			emp_photo
+		FROM 
+			employee
+		WHERE emp_id = #{emp_id}
+	</select>
+	
+	<!-- 특정 사원의 상세 정보 수정하기 (증명사진 포함) -->
+	<update id="updateEmpInfoProc" parameterType="java.util.HashMap">
+		UPDATE 
+			employee 
+		SET 
+			emp_name = #{emp_name}, 
+			emp_ename = #{emp_ename}, 
+			emp_gender = #{emp_gender}, 
+			emp_tel = #{emp_tel}, 
+			emp_email = #{emp_email}, 
+			emp_postcode = #{emp_postcode}, 
+			emp_addr = #{emp_addr}, 
+			emp_detailaddr = #{emp_detailaddr}, 
+			emp_extraaddr = #{emp_extraaddr}, 
+			dept_id = #{dept_id}, 
+			rank_id = #{rank_id}, 
+			emp_status = #{emp_status}, 
+			emp_hire = #{emp_hire}, 
+			emp_remarks = #{emp_remarks}, 
+			<if test="emp_birth != ''">
+			emp_birth = #{emp_birth}, 
+			</if>
+			<if test="emp_quit != ''">
+			emp_quit = #{emp_quit}, 			
+			</if>
+			emp_photo = #{emp_photo} 
+		WHERE 
+			emp_id = #{emp_id}
+	</update>
+	
+	<!-- 특정 사원의 상세 정보 수정하기 (증명사진 제외) -->
+	<update id="updateEmpInfoProcNotFile" parameterType="java.util.HashMap">
+		UPDATE 
+			employee 
+		SET 
+			emp_name = #{emp_name}, 
+			emp_ename = #{emp_ename}, 
+			emp_gender = #{emp_gender}, 
+			emp_tel = #{emp_tel}, 
+			emp_email = #{emp_email}, 
+			emp_postcode = #{emp_postcode}, 
+			emp_addr = #{emp_addr}, 
+			emp_detailaddr = #{emp_detailaddr}, 
+			emp_extraaddr = #{emp_extraaddr}, 
+			dept_id = #{dept_id}, 
+			rank_id = #{rank_id}, 
+			emp_status = #{emp_status}, 
+			emp_hire = #{emp_hire}, 
+			<if test="emp_birth != ''">
+			emp_birth = #{emp_birth}, 
+			</if>
+			<if test="emp_quit != ''">
+			emp_quit = #{emp_quit}, 			
+			</if>
+			emp_remarks = #{emp_remarks} 
+		WHERE 
+			emp_id = #{emp_id}
+	</update>
+	
+	<!-- 검색한 직원 목록 수 -->
+	<select id="getSearchEmployeeCount" parameterType="HashMap" resultType="int">
+		SELECT
+			COUNT(e.emp_id)
+		FROM 
+			employee AS e
+		LEFT JOIN
+			department AS d
+		ON
+			e.dept_id = d.dept_id
+		LEFT JOIN
+			rank AS r
+		ON 
+			e.rank_id = r.rank_id
+		WHERE
+			${select} LIKE CONCAT('%', #{search}, '%')
+	</select>
+	
+	<!-- 검색한 직원 목록 가져오기 -->
+	<select id="getSearchEmployeeList" parameterType="HashMap" resultType="com.pluckit.app.dto.EmployeeDTO">
+		SELECT 
+			e.emp_id,
+			e.emp_num,
+			e.emp_pw,
+			e.emp_name,
+			e.emp_ename,
+			e.emp_birth,
+			e.emp_gender,
+			e.emp_tel,
+			e.emp_email,
+			e.emp_postcode,
+			e.emp_addr,
+			e.emp_detailaddr,
+			e.emp_extraaddr,
+			e.dept_id,
+			e.rank_id,
+			e.emp_status,
+			e.emp_hire,
+			e.emp_quit,
+			e.emp_photo,
+			e.emp_auth,
+			d.dept_name AS deptName,
+			r.rank_name AS rankName,
+			e.emp_remarks
+		FROM 
+			employee AS e
+		LEFT JOIN
+			department AS d
+		ON
+			e.dept_id = d.dept_id
+		LEFT JOIN
+			rank AS r
+		ON 
+			e.rank_id = r.rank_id
+		WHERE
+		 	${select} LIKE CONCAT('%', #{search}, '%')
+		ORDER BY
+			emp_id DESC
+		LIMIT
+			${offset}, ${pageSize} 
+	</select>
+	
+	
+</mapper>

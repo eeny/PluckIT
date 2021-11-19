@@ -1,0 +1,124 @@
+@charset "UTF-8";
+/* 공통으로 작성해 놓은 CSS 시작*/
+*, html, body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html, body {
+	font-family: 'Noto Sans KR', sans-serif;
+	background-color: #f4f7f7;
+}
+
+a {
+	text-decoration: none;
+}
+/********************************************************************************/
+/* 공통으로 작성해 놓은 CSS 끝*/
+#wrap { /*전체를 감싸는 wrap*/
+	width: 100%;
+}
+
+/* 회원가입폼 전체를 감싸는 div */
+.signupBox {
+	width: 100%;
+	height: 880px;
+	padding-top: 50px;
+	margin-bottom: 50px;
+}
+
+/* 테두리가 있는 회원가입폼 */
+form {
+	width: 600px;
+	margin: 0 auto;
+	padding-top: 50px;
+	padding-bottom: 50px;
+	border: 1px solid #bbbb;
+}
+
+p {
+	font-family: 'Lato', sans-serif;
+	color: #3498db;
+	font-size: 50px;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+/* select, input태그들을 감싸는 table */
+table {
+	width: 90%;
+	margin: 0 auto;
+	border-spacing: 0 20px;
+	border-collapse: separate;
+	font-size: 17px;
+}
+
+th, td {
+	height: 44px;
+	border: 1px solid #bbbbbb;
+}
+
+th {
+	border-right: none; /* th, td 가운데 겹치는 선 없애기 */
+	background-color: #e0e0e0;
+}
+
+select, input {
+	width: 100%;
+	height: 100%;
+	padding: 10px;
+	font-family: 'Noto Sans KR', sans-serif;
+	font-size: 17px;
+	border: none;
+}
+
+/* 가입하기 버튼 */
+input.submit {
+	width: 50%;
+	height: 44px;
+	margin: 0 auto;
+	display: block;
+	cursor: pointer;
+	background-color: #0073c0;
+	color: white;
+	font-size: 17px;
+	font-weight: bolder;
+	border: none;
+}
+
+input.submit:hover {
+	background-color: #3498db;
+	border: none;
+}
+
+/* 로그인 링크 감싸는 div */
+.login {
+	padding-top: 15px;
+	text-align: center;
+	font-size: 14px;
+}
+
+.login a {
+	color: #0073c0;
+	font-weight: bolder;
+}
+
+/* Datepicker 모양 */
+.hasDatepicker {
+	cursor: pointer;
+}
+
+/* 달력 아이콘 */
+.birthTd {
+	position: relative;
+}
+
+.fa-calendar-alt {
+	color: #333333;
+	font-size: 25px;
+	position: absolute;
+	display: inline-block;
+	right: 10px;
+	top: 9px;
+}

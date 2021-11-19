@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+	<!-- 게시판 제목 목록 가져오기 (일반 권한) -->
+	<select id="getAllBoardTitleUser" parameterType="String" resultType="com.pluckit.app.dto.BoardDTO">
+		SELECT 
+			b.b_id, b.b_title
+		FROM 
+			board AS b
+		LEFT JOIN 
+			department AS d
+		ON 
+			b.dept_id = d.dept_id
+		WHERE 
+			d.dept_name IN(#{deptName})
+		AND NOT 
+			b.b_id IN('notice')
+		ORDER BY 
+			b_regdate
+	</select>
+	
+	<!-- 게시판 제목 목록 가져오기 (관리자 권한) -->
+	<select id="getAllBoardTitleAdmin" resultType="com.pluckit.app.dto.BoardDTO">
+		SELECT 
+			b_id, 
+			b_title 
+		FROM 
+			board 
+		WHERE NOT 
+			b_id IN('notice') 
+		ORDER BY 
+			b_regdate
+	</select>
+		
+	<!-- 게시판 제목 가져오기 -->
+	<select id="getBoardTitle" parameterType="String" resultType="String">
+		SELECT 
+			b_title 
+		FROM 
+			board 
+		WHERE 
+			b_id = #{pageName}
+	</select>
+	
+	<!-- 게시글 입력 -->
+	<insert id="writePostProc" parameterType="HashMap">
+		INSERT INTO board_main_${b_id} 
+		SET 
+			b_id = #{b_id},
+			bm_title = #{bm_title},
+			bm_writer = #{bm_writer},
+			bm_content = #{bm_content},
+			bm_regdate = NOW(),
+			bm_file = #{bm_file},
+			bm_savedfile = #{bm_savedfile},
+			bm_filepath = #{bm_filepath},
+			bm_hit = 0
+	</insert>
+	
+	<!-- 게시글에 답변글 관련 정보 추가 입력 -->
+	<update id="updatePostGrpInfo"	parameterType="HashMap">
+		<selectKey keyProperty="bm_num" resultType="int" order="BEFORE">
+			SELECT 
+				IFNULL(MAX(bm_num),1) 
+			FROM 
+				board_main_${b_id}
+		</selectKey>
+		
+		UPDATE board_main_${b_id}
+		SET 
+			bm_grpnum = #{bm_num},
+			bm_grpord = 0,
+			bm_grpdepth = 0
+		WHERE 
+			bm_num = #{bm_num}
+	</update>
+	
+	<!-- 게시글 목록 가져오기 -->
+	<select id="getAllBoardList" parameterType="HashMap" resultType="com.pluckit.app.dto.BoardMainDTO">
+		SELECT 
+			bm_num,
+			b_id,
+			bm_title,
+			bm_writer,
+			bm_content,
+			bm_regdate,
+			bm_hit,
+			bm_file,
+			bm_savedfile,
+			bm_filepath,
+			bm_grpnum,
+			bm_grpord,
+			bm_grpdepth
+		FROM 
+			board_main_${pageName}
+		ORDER BY
+			bm_grpnum DESC, 
+			bm_grpord ASC
+		LIMIT
+			${offset}, ${pageSize}
+	</select>
+	
+	<!-- 게시글 개수 가져오기 -->
+	<select id="getAllBoardCount" parameterType="String" resultType="int">
+		SELECT 
+			COUNT(bm_num) 
+		FROM 
+			board_main_${value}
+	</select>
+	
+	<!-- 게시글 조회수 증가 -->
+	<update id="updateHitCount" parameterType="HashMap">
+		UPDATE board_main_${pageName}
+		SET 
+			bm_hit = IFNULL(bm_hit,0) + 1
+		WHERE 
+			bm_num = #{bmNum}
+	</update>
+	
+	<!-- 게시글 내용 가져오기 -->
+	<select id="getPost" parameterType="HashMap" resultType="com.pluckit.app.dto.BoardMainDTO">
+		SELECT 
+			bm_num,
+			b_id,
+			bm_title,
+			bm_writer,
+			bm_content,
+			bm_regdate,
+			bm_hit,
+			bm_file,
+			bm_savedfile,
+			bm_filepath,
+			bm_grpnum,
+			bm_grpord,
+			bm_grpdepth
+		FROM 
+			board_main_${pageName}
+		WHERE
+			bm_num = #{bmNum}
+	</select>
+	
+	<!-- 수정전 기존 첨부파일명 가져오기 -->
+	<select id="getFileName" parameterType="HashMap" resultType="String">
+		SELECT 
+			bm_savedfile 
+		FROM 
+			board_main_${b_id}
+		WHERE 
+			bm_num = #{bm_num}
+	</select>
+	
+	<!-- 게시글 수정하기 (새파일 첨부) -->
+	<update id="modifyPost" parameterType="HashMap">
+		UPDATE board_main_${b_id}
+		SET
+			bm_title = #{bm_title},
+			bm_writer = #{bm_writer},
+			bm_content = #{bm_content},
+			bm_file = #{bm_file},
+			bm_savedfile = #{bm_savedfile},
+			bm_filepath = #{bm_filepath}
+		WHERE bm_num = #{bm_num}
+	</update>
+	
+	<!-- 게시글 수정하기 (기존파일 유지) -->
+	<update id="modifyPostNotFile" parameterType="HashMap">
+		UPDATE board_main_${b_id}
+		SET
+			bm_title = #{bm_title},
+			bm_writer = #{bm_writer},
+			bm_content = #{bm_content}
+		WHERE bm_num = #{bm_num}
+	</update>
+	
+	<!-- 게시글의 댓글 삭제하기 -->
+	<delete id="deletePostReply" parameterType="HashMap">
+		DELETE FROM board_reply_${pageName} 
+		WHERE 
+			bm_num = #{bmNum}
+	</delete>
+
+	<!-- 게시글 삭제하기 -->
+	<delete id="deletePost" parameterType="HashMap">
+		DELETE FROM board_main_${pageName} 
+		WHERE 
+			bm_num = #{bmNum}
+	</delete>	
+	
+	<!-- 댓글 달기 -->
+	<insert id="writeReplyProc" parameterType="com.pluckit.app.dto.BoardReplyDTO">
+		INSERT INTO board_reply_${b_id}
+		(
+			bm_num, 
+			r_writer, 
+			r_content, 
+			r_regdate
+		)
+		VALUES (
+			#{bm_num},
+			#{r_writer},
+			#{r_content},
+			NOW()
+		)
+	</insert>
+	
+	<!-- 댓글 가져오기 -->
+	<select id="getReplyProc" parameterType="com.pluckit.app.dto.BoardReplyDTO" resultType="com.pluckit.app.dto.BoardReplyDTO">
+		SELECT 
+			r_num, 
+			bm_num, 
+			r_writer, 
+			r_content, 
+			r_regdate 
+		FROM 
+			board_reply_${b_id}
+		WHERE 
+			bm_num = #{bm_num}
+	</select>
+	
+	<!-- 수정할 댓글 내용 가져오기 -->
+	<select id="getModReply" parameterType="com.pluckit.app.dto.BoardReplyDTO" resultType="com.pluckit.app.dto.BoardReplyDTO">
+		SELECT 
+			r_num, 
+			bm_num, 
+			r_writer, 
+			r_content, 
+			r_regdate 
+		FROM 
+			board_reply_${b_id}
+		WHERE 
+			r_num = #{r_num}
+	</select>
+	
+	<!-- 댓글 삭제하기 -->
+	<delete id="deleteReplyProc" parameterType="com.pluckit.app.dto.BoardReplyDTO">
+		DELETE FROM board_reply_${b_id} 
+		WHERE 
+			r_num = #{r_num}
+	</delete>
+	
+	<!-- 댓글 수정하기 -->
+	<update id="modifyReplyProc" parameterType="com.pluckit.app.dto.BoardReplyDTO">
+		UPDATE board_reply_${b_id}
+		SET 
+			r_content = #{r_content}
+		WHERE 
+			r_num = #{r_num}
+	</update>
+	
+	<!-- 답글 달기 (몇번째 답글인지 체크) -->
+	<select id="getMinBmGrpOrd" parameterType="HashMap" resultType="int">
+		SELECT 
+			IFNULL(MIN(bm_grpord),0)
+		FROM 
+			board_main_${b_id}
+		WHERE 
+			bm_grpnum = #{bmGrpnum}
+		AND 
+			<![CDATA[bm_grpord > #{bmGrpord}]]>
+		AND 
+			<![CDATA[bm_grpdepth <= #{bmGrpdepth}]]>
+	</select>
+	
+	<!-- 답글 달기 (첫번째 답글) -->
+	<insert id="insertFirstAnswer" parameterType="HashMap">
+		<selectKey keyProperty="grpOrd" resultType="int" order="BEFORE">
+			SELECT 
+				IFNULL(MAX(bm_grpord),0)+1 
+			FROM 
+				board_main_${b_id}
+			WHERE 
+				bm_grpnum = #{bmNum}
+		</selectKey>
+		
+		INSERT INTO board_main_${b_id} 
+		SET 
+			b_id = #{b_id},
+			bm_title = #{bm_title},
+			bm_writer = #{bm_writer},
+			bm_content = #{bm_content},
+			bm_regdate = NOW(),
+			bm_file = #{bm_file},
+			bm_savedfile = #{bm_savedfile},
+			bm_filepath = #{bm_filepath},
+			bm_hit = 0,
+			bm_grpnum = #{bmGrpnum},
+			bm_grpord = #{grpOrd},
+			bm_grpdepth = (#{bmGrpdepth} + 1)
+	</insert>
+	
+	<!-- 답글 달기 전 변경 (첫번째가 아닌 답글) -->
+	<update id="updateOtherAnswer" parameterType="HashMap">
+		<selectKey keyProperty="grpOrd" resultType="int" order="BEFORE">
+			SELECT 
+				IFNULL(MIN(bm_grpord),0)
+			FROM 
+				board_main_${b_id}
+			WHERE 
+				bm_grpnum = #{bmGrpnum}
+			AND 
+				<![CDATA[bm_grpord > #{bmGrpord}]]>
+			AND 
+				<![CDATA[bm_grpdepth <= #{bmGrpdepth}]]>
+		</selectKey>
+		
+		UPDATE board_main_${b_id}
+		SET 
+			bm_grpord = (bm_grpord + 1)
+		WHERE 
+			<![CDATA[bm_grpnum = ${bmGrpnum}]]>
+		AND 
+			<![CDATA[bm_grpord >= #{grpOrd}]]>
+	</update>
+	
+	<!-- 답글 달기 (첫번째가 아닌 답글) -->
+	<insert id="insertOtherAnswer" parameterType="HashMap">
+		<selectKey keyProperty="grpOrd" resultType="int" order="BEFORE">
+			SELECT 
+				IFNULL(MIN(bm_grpord),0)
+			FROM 
+				board_main_${b_id}
+			WHERE 
+				bm_grpnum = #{bmGrpnum}
+			AND 
+				<![CDATA[bm_grpord > #{bmGrpord}]]>
+			AND 
+				<![CDATA[bm_grpdepth <= #{bmGrpdepth}]]>
+		</selectKey>
+		
+		INSERT INTO board_main_${b_id} 
+		SET 
+			b_id = #{b_id},
+			bm_title = #{bm_title},
+			bm_writer = #{bm_writer},
+			bm_content = #{bm_content},
+			bm_regdate = NOW(),
+			bm_file = #{bm_file},
+			bm_savedfile = #{bm_savedfile},
+			bm_filepath = #{bm_filepath},
+			bm_hit = 0,
+			bm_grpnum = #{bmGrpnum},
+			bm_grpord = (#{grpOrd} - 1),
+			bm_grpdepth = (#{bmGrpdepth} + 1)
+	</insert>
+	
+	<!-- 검색 게시글 총 개수 -->
+	<select id="getSearchPostCount" parameterType="HashMap" resultType="int">
+		SELECT 
+			COUNT(bm_num)
+		FROM 
+			board_main_${pageName}
+		WHERE
+			${select} LIKE CONCAT('%', #{search}, '%')
+	</select>
+	
+	<!-- 게시글 검색하기 -->
+	<select id="searchPostList" parameterType="HashMap" resultType="com.pluckit.app.dto.BoardMainDTO">
+		SELECT 
+			bm_num,
+			b_id,
+			bm_title,
+			bm_writer,
+			bm_content,
+			bm_regdate,
+			bm_hit,
+			bm_file,
+			bm_savedfile,
+			bm_filepath,
+			bm_grpnum,
+			bm_grpord,
+			bm_grpdepth
+		FROM 
+			board_main_${pageName}
+		WHERE
+			${select} LIKE CONCAT('%', #{search}, '%')
+		ORDER BY
+			bm_grpnum DESC, 
+			bm_grpord ASC
+		LIMIT
+			${offset}, ${pageSize}
+	</select>
+	
+	
+	
+	
+	
+	
+</mapper>

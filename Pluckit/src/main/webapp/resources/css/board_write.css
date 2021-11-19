@@ -1,0 +1,283 @@
+@charset "UTF-8";
+
+*, html, body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* 공통으로 작성해 놓은 CSS 시작*/
+body {
+	font-family: 'Noto Sans KR', sans-serif;
+	width: 1920px;
+	height: 100%;
+	background-color: #f4f7f7;
+	overflow-x: hidden;
+}
+
+ul li {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+img {
+	display: block;
+	width: 100%;
+}
+
+/********************************************************************************/
+/* 공통으로 작성해 놓은 CSS 끝*/
+#wrap {
+	/*전체를 감싸는 wrap*/
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
+/*사이드 바 CSS 시작*/
+nav {
+	width: 200px;
+	height: 100%;
+}
+
+.gnb-align {
+	width: 200px;
+	height: 100%;
+	background-color: #0091EA;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+.logo {
+	text-align: center;
+	background-color: #0091EA;
+}
+
+.gnb-menu li {
+	width: 100%;
+	margin: 10px 0;
+	padding: 12px;
+	text-align: left;
+	cursor: pointer;
+}
+
+.gnb-menu li:hover {
+	background-color: #0382c2;
+}
+
+.gnb-menu li:first-child {
+	margin-top: 0;
+}
+
+.gnb-menu li a {
+	color: #efefef;
+	font-size: 16px;
+}
+
+.gnb-menu li a i {
+	margin-right: 10px;
+	font-size: 20px;
+}
+
+/********************************************************************************/
+/*사이드 바 CSS 끝*/
+main {
+	/*사이드 바 제외 main css*/
+	width: 1720px;
+	height: 100%;
+	background-color: #f4f7f7;
+}
+
+/*상단 메뉴 CSS 시작*/
+.main-top {
+	width: 1720px;
+	height: 50px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #ccc;
+	position: fixed;
+	background-color: #f4f7f7;
+	z-index: 1;
+}
+
+.user-name p {
+	color: #333;
+	font-size: 20px;
+	font-weight: 600;
+	margin-left: 30px;
+}
+
+.main-top-icon {
+	display: flex;
+}
+
+.main-top-icon i {
+	font-size: 28px;
+	margin-right: 30px;
+	padding-top: 6px;
+	color: #333;
+	cursor: pointer;
+}
+
+.search {
+	border: 3px solid #0288d1;
+	padding: 5px;
+	margin-right: 30px;
+	width: 250px;
+	color: #333;
+}
+
+.f {
+	display: flex;
+	justify-content: space-between;
+}
+
+.f>input[type=search] {
+	background-color: transparent;
+	border: none;
+}
+
+input::-webkit-input-placeholder {
+	color: #333;
+	font-size: 12px;
+}
+
+.f>button {
+	background-color: transparent;
+	border: none;
+}
+
+.f>button>i {
+	font-size: 20px;
+	margin-right: 0;
+	padding-top: 0;
+	padding: 0 10px;
+}
+
+/********************************************************************************/
+/*상단 메뉴 CSS 끝*/
+.main-section {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 50px;
+}
+
+/*************** 여기서부터 추가했음 ******************/
+/*왼쪽 세부 메뉴*/
+.main-left {
+	width: 200px;
+	height: 100%;
+	background-color: white;
+	border-right: 1px solid #ccc;
+	position: fixed;
+}
+
+.main-left ul {
+	width: 100%;
+	height: 100%;
+}
+
+.main-left li {
+	border-bottom: 1px solid #ccc;
+}
+
+.main-left a {
+	height: 45px;
+	display: block;
+	color: #333;
+	font-size: 14px;
+	text-align: left;
+	line-height: 45px;
+	padding-left: 10px;
+}
+/*왼쪽 세부 메뉴 중 클릭시 색 변경*/
+a.clickBtn {
+	color: white;
+	font-weight: bold;
+	background-color: #0288d1;
+}
+
+/*오른쪽 본문 부분*/
+.main-right {
+	width: 1520px;
+	height: 100%;
+	padding: 15px 30px;
+}
+
+.main-right h1 { /*게시판 제목 - 공지사항*/
+	color: #333;
+	font-size: 18px;
+	margin-bottom: 30px;
+}
+
+table.noticeTable { /*테이블*/
+	width: 100%;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	color: #333;
+	font-size: 13px;
+	text-align: left;
+	background-color: white;
+	table-layout: fixed; /* 테이블 너비 고정 */
+	word-break: break-all; /* 텍스트 자동 줄바꿈 */
+}
+
+.noticeTable td, .noticeTable th {
+	height: 32px;
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+
+.noticeTable th {
+	background-color: #7fbfe752;
+}
+
+.noticeTable input {
+	width: 100%;
+	height: 25px;
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+
+.noticeTable input[type=file] {
+	display: none;
+}
+
+.noticeTable label {
+	width: 100%;
+	height: 25px;
+	text-decoration: underline;
+	cursor: pointer;
+	display: block;
+}
+
+textarea {
+	width: 100%;
+	height: 400px;
+	border: 1px solid #ccc;
+}
+
+.buttons { /*버튼들 - 글쓰기*/
+	text-align: right;
+}
+
+a.write {
+	padding: 7px 15px;
+	border-radius: 3px 3px 3px 3px;
+	background-color: #0288d1;
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+a.cancel {
+	background-color: #8a959b;
+}

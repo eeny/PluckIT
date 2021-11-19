@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="schedule">
+	<!-- 일정 등록 -->
+	<insert id="insertSchedule" parameterType="com.pluckit.app.dto.ScheduleDTO">
+	INSERT INTO schedule (
+		sc_title, 
+		sc_start, 
+		sc_end, 
+		emp_id
+	) VALUES (
+		#{sc_title}, 
+		#{sc_start}, 
+		#{sc_end}, 
+		#{emp_id}
+	)		
+	</insert>
+
+	<!-- 일정 가져오기 -->
+	<select id="getScheduleList" resultType="com.pluckit.app.dto.ScheduleDTO">
+		SELECT
+			s.sc_id,
+			s.sc_title,
+			s.sc_start,
+			s.sc_end,
+			s.emp_id,
+			e.emp_name AS 'empName',
+			d.dept_name AS 'deptName'
+		FROM
+			schedule AS s
+		LEFT JOIN
+			employee AS e
+		ON
+			s.emp_id = e.emp_id
+		LEFT JOIN
+			department AS d
+		ON
+			e.dept_id = d.dept_id
+	</select>
+
+	<!-- 일정 삭제 -->
+	<delete id="deleteSchedule" parameterType="int">
+		DELETE FROM 
+			schedule
+		WHERE
+			sc_id = #{sc_id}
+	</delete>
+</mapper>
